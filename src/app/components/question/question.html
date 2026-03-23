@@ -1,0 +1,52 @@
+@if (config && current) {
+  <main class="question-page">
+    <header class="question-page__header">
+      <div class="progress-bar">
+        <div class="progress-bar__fill" [style.width.%]="progress"></div>
+      </div>
+      <span class="question-page__counter">Frage {{ index + 1 }} von {{ config.questions.length }}</span>
+    </header>
+
+    <section class="question-page__body">
+      <span class="question-page__category">{{ current.category }}</span>
+      <h2 class="question-page__text">{{ current.text }}</h2>
+
+      <div class="answer-buttons">
+        <button
+          class="answer-btn answer-btn--agree"
+          [class.answer-btn--selected]="selectedAnswer === 1"
+          (click)="select(1)"
+        >
+          <span class="answer-btn__icon">✓</span>
+          Stimme zu
+        </button>
+        <button
+          class="answer-btn answer-btn--neutral"
+          [class.answer-btn--selected]="selectedAnswer === 0"
+          (click)="select(0)"
+        >
+          <span class="answer-btn__icon">–</span>
+          Neutral
+        </button>
+        <button
+          class="answer-btn answer-btn--disagree"
+          [class.answer-btn--selected]="selectedAnswer === -1"
+          (click)="select(-1)"
+        >
+          <span class="answer-btn__icon">✗</span>
+          Stimme nicht zu
+        </button>
+      </div>
+    </section>
+
+    <footer class="question-page__footer">
+      <button class="btn btn--ghost" (click)="back()">← Zurück</button>
+      <button class="btn btn--secondary" (click)="skip()">Überspringen</button>
+      <button class="btn btn--primary" (click)="next()" [disabled]="selectedAnswer === undefined">
+        @if (index === config.questions.length - 1) { Auswerten } @else { Weiter → }
+      </button>
+    </footer>
+  </main>
+} @else {
+  <div class="loading">Lade Frage…</div>
+}

@@ -1,0 +1,38 @@
+<main class="results-page">
+  <header class="results-page__header">
+    <h1>Dein Ergebnis</h1>
+    <p class="results-page__subtitle">So gut passen die Parteien zu deinen Antworten:</p>
+  </header>
+
+  @if (results.length > 0) {
+    <section class="results-list">
+      @for (result of results; track result.party.id; let i = $index) {
+        <div class="result-card" [class.result-card--top]="i === 0">
+          @if (i === 0) {
+            <span class="result-card__badge">Beste Übereinstimmung</span>
+          }
+          <div class="result-card__header">
+            <span class="result-card__name">{{ result.party.name }}</span>
+            <span class="result-card__score">{{ result.score }}%</span>
+          </div>
+          <div class="result-card__bar-track">
+            <div
+              class="result-card__bar-fill"
+              [style.width.%]="result.score"
+              [style.backgroundColor]="result.party.color"
+            ></div>
+          </div>
+          <span class="result-card__detail">
+            {{ result.matches }} von {{ result.total * 2 }} möglichen Punkten
+          </span>
+        </div>
+      }
+    </section>
+  } @else {
+    <p class="results-page__empty">Keine Antworten vorhanden. Bitte starte neu.</p>
+  }
+
+  <footer class="results-page__footer">
+    <button class="btn btn--primary" (click)="restart()">Neu starten</button>
+  </footer>
+</main>

@@ -1,0 +1,98 @@
+{
+  "title": "Wahl-O-Mat 2025",
+  "description": "Finde heraus, welche Partei am besten zu deinen politischen Ansichten passt.",
+  "parties": [
+    {
+      "id": "cdu",
+      "name": "Christlich Demokratische Union",
+      "shortName": "CDU",
+      "color": "#000000"
+    },
+    {
+      "id": "spd",
+      "name": "Sozialdemokratische Partei Deutschlands",
+      "shortName": "SPD",
+      "color": "#E3000F"
+    },
+    {
+      "id": "grüne",
+      "name": "Bündnis 90/Die Grünen",
+      "shortName": "Grüne",
+      "color": "#1AA037"
+    },
+    {
+      "id": "fdp",
+      "name": "Freie Demokratische Partei",
+      "shortName": "FDP",
+      "color": "#FFED00"
+    },
+    {
+      "id": "linke",
+      "name": "Die Linke",
+      "shortName": "Linke",
+      "color": "#BE3075"
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "text": "Der Mindestlohn soll auf 15 Euro pro Stunde erhöht werden.",
+      "category": "Wirtschaft",
+      "positions": {
+        "cdu": -1,
+        "spd": 1,
+        "grüne": 1,
+        "fdp": -1,
+        "linke": 1
+      }
+    },
+    {
+      "id": "q2",
+      "text": "Deutschland soll bis 2035 vollständig auf erneuerbare Energien umsteigen.",
+      "category": "Klimaschutz",
+      "positions": {
+        "cdu": 0,
+        "spd": 1,
+        "grüne": 1,
+        "fdp": 0,
+        "linke": 1
+      }
+    },
+    {
+      "id": "q3",
+      "text": "Die Schuldenbremse im Grundgesetz soll abgeschafft werden.",
+      "category": "Finanzen",
+      "positions": {
+        "cdu": -1,
+        "spd": 1,
+        "grüne": 1,
+        "fdp": -1,
+        "linke": 1
+      }
+    },
+    {
+      "id": "q4",
+      "text": "Deutschland soll mehr Geflüchtete aufnehmen als bisher.",
+      "category": "Migration",
+      "positions": {
+        "cdu": -1,
+        "spd": 0,
+        "grüne": 1,
+        "fdp": 0,
+        "linke": 1
+      }
+    },
+    {
+      "id": "q5",
+      "text": "Cannabis soll für Erwachsene legal und in Geschäften kaufbar sein.",
+      "category": "Gesellschaft",
+      "positions": {
+        "cdu": -1,
+        "spd": 1,
+        "grüne": 1,
+        "fdp": 1,
+        "linke": 1
+      }
+    }
+  ]
+}

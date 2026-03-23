@@ -1,0 +1,39 @@
+{
+  "name": "Wahl-O-Mat Angular Dev",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+
+  "forwardPorts": [4200, 4201],
+  "portsAttributes": {
+    "4200": { "label": "Angular Dev Server", "onAutoForward": "openBrowser" },
+    "4201": { "label": "Angular Test Runner" }
+  },
+
+  "postCreateCommand": "npm install -g @angular/cli @anthropic-ai/claude-code && ([ -f package.json ] && npm install || true)",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "angular.ng-template",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-vscode.vscode-typescript-next",
+        "formulahendry.auto-close-tag",
+        "christian-kohler.path-intellisense"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll.eslint": "explicit"
+        },
+        "js/ts.preferences.importModuleSpecifier": "relative"
+      }
+    }
+  },
+
+  "remoteUser": "node"
+}

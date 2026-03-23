@@ -1,0 +1,41 @@
+@if (config(); as config) {
+  <main class="start">
+    <div class="start__hero">
+      <h1 class="start__title">{{ config.title }}</h1>
+      <p class="start__description">{{ config.description }}</p>
+      <div class="start__meta">
+        <span class="start__badge">{{ config.questions.length }} Fragen</span>
+        <span class="start__badge">{{ config.parties.length }} Parteien</span>
+      </div>
+      <button class="btn btn--primary start__cta" (click)="start()">Jetzt starten</button>
+    </div>
+
+    <section class="start__parties">
+      <h2>Teilnehmende Parteien</h2>
+      <ul class="party-list">
+        @for (party of config.parties; track party.id) {
+          <li class="party-chip" [style.borderColor]="party.color">
+            <span class="party-chip__dot" [style.backgroundColor]="party.color"></span>
+            {{ party.shortName }}
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section class="start__how">
+      <h2>So funktioniert es</h2>
+      <ol class="how-list">
+        <li>
+          Beantworte jede politische These mit <strong>Stimme zu</strong>,
+          <strong>Neutral</strong> oder <strong>Stimme nicht zu</strong>.
+        </li>
+        <li>Du kannst Fragen auch überspringen.</li>
+        <li>Am Ende siehst du, welche Partei am besten zu deinen Ansichten passt.</li>
+      </ol>
+    </section>
+  </main>
+} @else if (error()) {
+  <div class="error">Fehler: {{ error() }}</div>
+} @else {
+  <div class="loading">Lade Konfiguration…</div>
+}

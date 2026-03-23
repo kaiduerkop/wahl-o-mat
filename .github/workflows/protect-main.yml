@@ -1,0 +1,20 @@
+name: Protect Main Branch
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-source-branch:
+    name: Ensure PR comes from develop
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check source branch
+        run: |
+          if [ "${{ github.head_ref }}" != "develop" ]; then
+            echo "Error: PRs to main are only allowed from the 'develop' branch."
+            echo "This PR is from '${{ github.head_ref }}'."
+            exit 1
+          fi
+          echo "Source branch is 'develop'. OK."
