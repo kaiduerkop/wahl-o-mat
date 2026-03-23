@@ -9,8 +9,10 @@ export class ConfigService {
 
   constructor(private http: HttpClient) {
     this.config$ = this.http.get<Config>('assets/config.json').pipe(
-      catchError(err => throwError(() => new Error(`Konfiguration konnte nicht geladen werden: ${err.message}`))),
-      shareReplay(1)
+      catchError((err) =>
+        throwError(() => new Error(`Failed to load configuration: ${err.message}`)),
+      ),
+      shareReplay(1),
     );
   }
 

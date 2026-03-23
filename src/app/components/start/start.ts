@@ -14,18 +14,21 @@ export class Start {
   error = signal<string | null>(null);
   config;
 
-  constructor(private configService: ConfigService, private router: Router) {
+  constructor(
+    private configService: ConfigService,
+    private router: Router,
+  ) {
     this.config = toSignal(
       this.configService.getConfig().pipe(
-        catchError(err => {
+        catchError((err) => {
           this.error.set(err.message);
           return of(null);
-        })
-      )
+        }),
+      ),
     );
   }
 
   start(): void {
-    this.router.navigate(['/frage', 0]);
+    this.router.navigate(['/question', 0]);
   }
 }

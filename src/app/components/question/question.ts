@@ -20,13 +20,13 @@ export class Question implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private configService: ConfigService,
-    private answersService: AnswersService
+    private answersService: AnswersService,
   ) {}
 
   ngOnInit(): void {
-    this.configService.getConfig().subscribe(config => {
+    this.configService.getConfig().subscribe((config) => {
       this.config = config;
-      this.route.paramMap.subscribe(params => {
+      this.route.paramMap.subscribe((params) => {
         this.index = Number(params.get('index') ?? 0);
         this.current = config.questions[this.index] ?? null;
         this.selectedAnswer = this.answersService.getAnswer(this.current?.id ?? '');
@@ -62,11 +62,11 @@ export class Question implements OnInit {
   private navigate(idx: number): void {
     if (!this.config) return;
     if (idx >= this.config.questions.length) {
-      this.router.navigate(['/ergebnis']);
+      this.router.navigate(['/results']);
     } else if (idx < 0) {
       this.router.navigate(['/']);
     } else {
-      this.router.navigate(['/frage', idx]);
+      this.router.navigate(['/question', idx]);
     }
   }
 }

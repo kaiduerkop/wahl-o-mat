@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-impressum',
+  selector: 'app-privacy',
   imports: [RouterLink],
-  templateUrl: './impressum.html'
+  templateUrl: './privacy.html',
 })
-export class Impressum {}
+export class Datenschutz {}

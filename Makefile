@@ -5,10 +5,10 @@ IMAGE   := ghcr.io/kaiduerkop/wahl-o-mat
 .PHONY: dev-release
 
 dev-release:
-	@echo "Aktueller Tag:  $(TAG)"
+	@echo "Current tag:    $(TAG)"
 	@echo "Image:          $(IMAGE):$(DEV_TAG)"
 	@echo ""
 	docker build -t $(IMAGE):$(DEV_TAG) .
 	docker push $(IMAGE):$(DEV_TAG)
 	@echo ""
-	@echo "Fertig: $(IMAGE):$(DEV_TAG) wurde auf ghcr.io hochgeladen."
+	@echo "Done: $(IMAGE):$(DEV_TAG) pushed to ghcr.io."
