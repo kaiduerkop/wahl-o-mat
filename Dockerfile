@@ -14,7 +14,7 @@ FROM nginx:alpine
 
 COPY --from=builder /app/dist/wahl-o-mat/browser /usr/share/nginx/html
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY nginx/site.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
