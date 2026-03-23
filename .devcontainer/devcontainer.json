@@ -6,13 +6,17 @@
     "ghcr.io/devcontainers/features/git:1": {}
   },
 
+  "mounts": [
+    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly"
+  ],
+
   "forwardPorts": [4200, 4201],
   "portsAttributes": {
     "4200": { "label": "Angular Dev Server", "onAutoForward": "openBrowser" },
     "4201": { "label": "Angular Test Runner" }
   },
 
-  "postCreateCommand": "npm install -g @angular/cli @anthropic-ai/claude-code && ([ -f package.json ] && npm install || true)",
+  "postCreateCommand": "npm install -g @angular/cli && ([ -f package.json ] && npm install || true)",
 
   "customizations": {
     "vscode": {
