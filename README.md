@@ -1,3 +1,5 @@
+[![Release](https://github.com/kaiduerkop/wahl-o-mat/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/kaiduerkop/wahl-o-mat/actions/workflows/release.yml)
+
 # Wahl-O-Mat
 
 Eine konfigurierbare Wahlentscheidungshilfe (Voting Advice Application) auf Basis von Angular. Nutzer beantworten politische Thesen mit Zustimmung, Neutral oder Ablehnung und erhalten anschließend eine Übersicht, welche Parteien am besten zu ihrer Haltung passen.
@@ -157,6 +159,15 @@ Dort können Fragen, Parteien und Positionen verwaltet werden, ohne die Anwendun
 | --------- | ------------------------------------------------------ |
 | `main`    | Geschützt; nur Merges aus `develop` (via Pull Request) |
 | `develop` | Aktiver Entwicklungs-Branch                            |
+
+---
+
+## Unterstützung
+
+Wenn dir dieses Projekt gefällt, freue ich mich über einen Kaffee! ☕
+
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://www.buymeacoffee.com/gorgil)
+[![Ko-fi](https://img.shields.io/badge/Ko--fi-FF5E5B?style=for-the-badge&logo=ko-fi&logoColor=white)](https://ko-fi.com/gorgil2026)
 
 ---
 
