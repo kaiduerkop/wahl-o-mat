@@ -1,6 +1,17 @@
 [![Release](https://github.com/kaiduerkop/wahl-o-mat/actions/workflows/release.yml/badge.svg?branch=main)](https://github.com/kaiduerkop/wahl-o-mat/actions/workflows/release.yml)
+[![Demo](https://img.shields.io/badge/Demo-wom.duerkop.org-blue?style=flat-square)](https://wom.duerkop.org/)
 
 # Wahl-O-Mat
+
+🔗 **Live-Demo:** [wom.duerkop.org](https://wom.duerkop.org/)
+
+## Screenshots
+
+|                 Startseite                  |                   Frage                   |                  Ergebnis                   |
+| :-----------------------------------------: | :---------------------------------------: | :-----------------------------------------: |
+| ![Startseite](public/screenshots/start.png) | ![Frage](public/screenshots/question.png) | ![Ergebnis](public/screenshots/results.png) |
+
+---
 
 Eine konfigurierbare Wahlentscheidungshilfe (Voting Advice Application) auf Basis von Angular. Nutzer beantworten politische Thesen mit Zustimmung, Neutral oder Ablehnung und erhalten anschließend eine Übersicht, welche Parteien am besten zu ihrer Haltung passen.
 
