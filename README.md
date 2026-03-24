@@ -105,11 +105,108 @@ Der Gesamtscore ergibt sich aus `(erreichte Punkte / maximale Punkte) × 100`.
 
 ## Schnellstart mit Docker
 
-```bash
-docker compose up --build
+Das fertige Image wird bei jedem Release automatisch auf der GitHub Container Registry veröffentlicht:
+
+```
+ghcr.io/kaiduerkop/wahl-o-mat:latest
 ```
 
-Die Anwendung ist anschließend unter **http://localhost:4200** erreichbar.
+[![Docker Image](https://ghcr-badge.egpl.dev/kaiduerkop/wahl-o-mat/latest_tag?trim=major&label=ghcr.io)](https://github.com/kaiduerkop/wahl-o-mat/pkgs/container/wahl-o-mat)
+
+---
+
+### Option A – Vorgebautes Image (empfohlen)
+
+Kein Build nötig. Erstelle eine `compose.yml` mit dem fertigen Image:
+
+```yaml
+services:
+  wahl-o-mat:
+    image: ghcr.io/kaiduerkop/wahl-o-mat:latest
+    ports:
+      - '8080:80'
+    volumes:
+      - wahl-o-mat-data:/app/data
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
+      CORS_ORIGIN: ${CORS_ORIGIN:-}
+
+volumes:
+  wahl-o-mat-data:
+```
+
+Dann starten:
+
+```bash
+JWT_SECRET=mein-geheimes-secret docker compose up -d
+```
+
+---
+
+### Option B – Selbst bauen (aus Quellcode)
+
+### 1. Repository klonen
+
+```bash
+git clone https://github.com/kaiduerkop/wahl-o-mat.git
+cd wahl-o-mat
+```
+
+### 2. `compose.yml`
+
+Die mitgelieferte `compose.yml` baut das Image lokal und startet die Anwendung:
+
+```yaml
+services:
+  wahl-o-mat:
+    build: .
+    ports:
+      - '8080:80'
+    volumes:
+      - wahl-o-mat-data:/app/data
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
+      CORS_ORIGIN: ${CORS_ORIGIN:-}
+
+volumes:
+  wahl-o-mat-data:
+```
+
+> **Hinweis:** `JWT_SECRET` ist ein Pflichtfeld. Ohne gesetzten Wert startet der Container nicht.
+
+### 3. Container starten
+
+```bash
+# Minimal (JWT_SECRET als Inline-Variable)
+JWT_SECRET=mein-geheimes-secret docker compose up --build -d
+```
+
+Oder mit einer `.env`-Datei:
+
+```bash
+# .env anlegen
+cat > .env <<EOF
+ADMIN_PASSWORD=mein-passwort
+JWT_SECRET=mein-geheimes-secret
+EOF
+
+# Container starten
+docker compose up --build -d
+```
+
+---
+
+Die Anwendung ist anschließend unter **http://localhost:8080** erreichbar.
+
+### 4. Logs & Verwaltung
+
+```bash
+docker compose logs -f        # Live-Logs anzeigen
+docker compose down           # Container stoppen
+docker compose down -v        # Container + Datenbank-Volume löschen
+```
 
 ---
 

@@ -32,17 +32,6 @@ jobs:
         env:
           OUTPUT: CHANGELOG.md
 
-      - name: Detect branch
-        id: detect
-        run: |
-          BRANCH=$(git branch -r --contains HEAD | grep -v HEAD | sed 's|  origin/||' | head -1)
-          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
-          if [ "$BRANCH" = "develop" ]; then
-            echo "tag_suffix=-dev" >> $GITHUB_OUTPUT
-          else
-            echo "tag_suffix=" >> $GITHUB_OUTPUT
-          fi
-
       - name: Log in to Container Registry
         uses: docker/login-action@v4
         with:
@@ -55,8 +44,6 @@ jobs:
         uses: docker/metadata-action@v6
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          flavor: |
-            suffix=${{ steps.detect.outputs.tag_suffix }}
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
