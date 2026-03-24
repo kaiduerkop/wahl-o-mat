@@ -3,6 +3,12 @@
 
 # Wahl-O-Mat
 
+Eine konfigurierbare Wahlentscheidungshilfe (Voting Advice Application) auf Basis von Angular. Nutzer beantworten politische Thesen mit Zustimmung, Neutral oder Ablehnung und erhalten anschließend eine Übersicht, welche Parteien am besten zu ihrer Haltung passen.
+
+> **Datenschutz:** Alle Antworten verbleiben ausschließlich im Browser-Speicher der laufenden Sitzung. Es werden keine persönlichen Daten übertragen oder gespeichert.
+
+---
+
 🔗 **Live-Demo:** [wom.duerkop.org](https://wom.duerkop.org/)
 
 ## Screenshots
@@ -11,11 +17,11 @@
 | :-----------------------------------------: | :---------------------------------------: | :-----------------------------------------: |
 | ![Startseite](public/screenshots/start.png) | ![Frage](public/screenshots/question.png) | ![Ergebnis](public/screenshots/results.png) |
 
----
+## Admin
 
-Eine konfigurierbare Wahlentscheidungshilfe (Voting Advice Application) auf Basis von Angular. Nutzer beantworten politische Thesen mit Zustimmung, Neutral oder Ablehnung und erhalten anschließend eine Übersicht, welche Parteien am besten zu ihrer Haltung passen.
-
-> **Datenschutz:** Alle Antworten verbleiben ausschließlich im Browser-Speicher der laufenden Sitzung. Es werden keine persönlichen Daten übertragen oder gespeichert.
+|                     Allgemein                      |                     Fragen                      |
+| :------------------------------------------------: | :---------------------------------------------: |
+| ![Allgemein](public/screenshots/admin_general.png) | ![Frage](public/screenshots/admin_question.png) |
 
 ---
 
