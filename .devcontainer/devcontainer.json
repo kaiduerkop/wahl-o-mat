@@ -8,8 +8,7 @@
   },
 
   "mounts": [
-    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly",
-    "source=${localEnv:HOME}/.docker,target=/home/node/.docker,type=bind,consistency=cached"
+    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly"
   ],
 
   "forwardPorts": [4200, 4201],

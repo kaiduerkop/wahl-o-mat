@@ -1,0 +1,238 @@
+<div class="admin">
+  <header class="admin__header">
+    <h1 class="admin__title">⚙️ Admin – Konfiguration</h1>
+    <div class="admin__header-actions">
+      @if (saveStatus === 'saving') {
+        <span class="admin__save-msg admin__save-msg--saving">⏳ Speichert…</span>
+      }
+      @if (saveStatus === 'ok') {
+        <span class="admin__save-msg admin__save-msg--ok">✓ Gespeichert</span>
+      }
+      @if (saveStatus === 'error') {
+        <span class="admin__save-msg admin__save-msg--error">✗ Fehler beim Speichern</span>
+      }
+      <button class="btn btn--ghost" (click)="logout()">🚪 Abmelden</button>
+      <button
+        class="btn btn--primary"
+        (click)="save()"
+        [disabled]="!config || saveStatus === 'saving'"
+      >
+        💾 Speichern
+      </button>
+    </div>
+  </header>
+
+  @if (loading) {
+    <p class="loading">Lade Konfiguration…</p>
+  }
+
+  @if (config) {
+    <!-- ── Allgemein ── -->
+    <section class="admin__section">
+      <h2 class="admin__section-title">Allgemein</h2>
+      <div class="admin__form-group">
+        <label class="admin__label">Titel</label>
+        <input [(ngModel)]="config.title" class="admin__input" placeholder="Titel der Wahl" />
+      </div>
+      <div class="admin__form-group">
+        <label class="admin__label">Beschreibung</label>
+        <textarea
+          [(ngModel)]="config.description"
+          class="admin__input admin__textarea"
+          rows="2"
+        ></textarea>
+      </div>
+    </section>
+
+    <!-- ── Parteien ── -->
+    <section class="admin__section">
+      <div class="admin__section-head">
+        <h2 class="admin__section-title">Parteien ({{ config.parties.length }})</h2>
+        <button class="btn btn--secondary" (click)="addParty()">+ Partei hinzufügen</button>
+      </div>
+
+      @for (party of config.parties; track party.id) {
+        <div class="admin__card">
+          <div class="admin__card-row">
+            <div class="admin__form-group admin__form-group--sm">
+              <label class="admin__label">ID</label>
+              <input
+                #idRef
+                [value]="party.id"
+                (change)="updatePartyId($index, party.id, idRef.value)"
+                class="admin__input"
+                placeholder="cdu"
+              />
+            </div>
+            <div class="admin__form-group admin__form-group--sm">
+              <label class="admin__label">Kürzel</label>
+              <input [(ngModel)]="party.shortName" class="admin__input" placeholder="CDU" />
+            </div>
+            <div class="admin__form-group admin__form-group--grow">
+              <label class="admin__label">Name</label>
+              <input
+                [(ngModel)]="party.name"
+                class="admin__input"
+                placeholder="Vollständiger Name"
+              />
+            </div>
+            <div class="admin__form-group admin__form-group--color">
+              <label class="admin__label">Farbe</label>
+              <input
+                type="color"
+                [(ngModel)]="party.color"
+                class="admin__color-input"
+                [title]="party.color"
+              />
+            </div>
+            <button
+              class="btn btn--ghost admin__remove-btn"
+              (click)="removeParty($index)"
+              title="Partei entfernen"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      }
+    </section>
+
+    <!-- ── Fragen ── -->
+    <section class="admin__section">
+      <div class="admin__section-head">
+        <h2 class="admin__section-title">Fragen ({{ config.questions.length }})</h2>
+        <button class="btn btn--secondary" (click)="addQuestion()">+ Frage hinzufügen</button>
+      </div>
+
+      @for (question of config.questions; track question.id) {
+        <div class="admin__card">
+          <div class="admin__card-row">
+            <div class="admin__form-group admin__form-group--sm">
+              <label class="admin__label">ID</label>
+              <input [(ngModel)]="question.id" class="admin__input" placeholder="q1" />
+            </div>
+            <div class="admin__form-group admin__form-group--sm">
+              <label class="admin__label">Kategorie</label>
+              <input
+                [(ngModel)]="question.category"
+                class="admin__input"
+                placeholder="Wirtschaft"
+              />
+            </div>
+            <button
+              class="btn btn--ghost admin__remove-btn"
+              (click)="removeQuestion($index)"
+              title="Frage entfernen"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div class="admin__form-group">
+            <label class="admin__label">Fragetext</label>
+            <textarea
+              [(ngModel)]="question.text"
+              class="admin__input admin__textarea"
+              rows="2"
+              placeholder="Die Frage…"
+            ></textarea>
+          </div>
+
+          <div class="admin__positions">
+            @for (party of config.parties; track party.id) {
+              <div class="admin__position-item">
+                <span
+                  class="admin__position-chip"
+                  [style.border-color]="party.color"
+                  [style.color]="party.color"
+                  >{{ party.shortName }}</span
+                >
+                <select [(ngModel)]="question.positions[party.id]" class="admin__select">
+                  <option [ngValue]="1">Stimme zu</option>
+                  <option [ngValue]="0">Neutral</option>
+                  <option [ngValue]="-1">Stimme nicht zu</option>
+                </select>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- ── Passwort ändern ── -->
+  <section class="admin__section admin__section--pw">
+    <div class="admin__section-head">
+      <h2 class="admin__section-title">🔒 Passwort ändern</h2>
+      <button class="btn btn--ghost" (click)="showPwForm = !showPwForm">
+        {{ showPwForm ? 'Schließen' : 'Ändern' }}
+      </button>
+    </div>
+    @if (showPwForm) {
+      <div class="admin__form-group">
+        <label class="admin__label">Aktuelles Passwort</label>
+        <input
+          type="password"
+          [(ngModel)]="pwCurrent"
+          class="admin__input"
+          autocomplete="current-password"
+        />
+      </div>
+      <div class="admin__form-group">
+        <label class="admin__label">Neues Passwort (min. 8 Zeichen)</label>
+        <input
+          type="password"
+          [(ngModel)]="pwNew"
+          class="admin__input"
+          autocomplete="new-password"
+        />
+      </div>
+      <div class="admin__form-group">
+        <label class="admin__label">Neues Passwort bestätigen</label>
+        <input
+          type="password"
+          [(ngModel)]="pwConfirm"
+          class="admin__input"
+          autocomplete="new-password"
+        />
+      </div>
+      @if (pwError) {
+        <p class="admin__pw-error">⚠ {{ pwError }}</p>
+      }
+      <div class="admin__pw-actions">
+        @if (pwStatus === 'ok') {
+          <span class="admin__save-msg admin__save-msg--ok">✓ Passwort geändert</span>
+        }
+        <button
+          class="btn btn--secondary"
+          (click)="changePassword()"
+          [disabled]="pwStatus === 'saving' || !pwCurrent || !pwNew || !pwConfirm"
+        >
+          {{ pwStatus === 'saving' ? 'Speichert…' : 'Passwort speichern' }}
+        </button>
+      </div>
+    }
+  </section>
+
+  <!-- Sticky save bar -->
+  @if (config) {
+    <div class="admin__sticky-bar">
+      <button
+        class="btn btn--primary admin__sticky-btn"
+        (click)="save()"
+        [disabled]="saveStatus === 'saving'"
+      >
+        💾 Konfiguration speichern
+      </button>
+      @if (saveStatus === 'saving') {
+        <span class="admin__save-msg admin__save-msg--saving">⏳ Speichert…</span>
+      }
+      @if (saveStatus === 'ok') {
+        <span class="admin__save-msg admin__save-msg--ok">✓ Gespeichert</span>
+      }
+      @if (saveStatus === 'error') {
+        <span class="admin__save-msg admin__save-msg--error">✗ Fehler</span>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,14 @@
+services:
+  wahl-o-mat:
+    build: .
+    ports:
+      - '8080:80'
+    volumes:
+      - wahl-o-mat-data:/app/data
+    environment:
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-admin}
+      JWT_SECRET: ${JWT_SECRET:?JWT_SECRET must be set}
+      CORS_ORIGIN: ${CORS_ORIGIN:-}
+
+volumes:
+  wahl-o-mat-data:

@@ -8,7 +8,7 @@ export class ConfigService {
   private config$: Observable<Config>;
 
   constructor(private http: HttpClient) {
-    this.config$ = this.http.get<Config>('assets/config.json').pipe(
+    this.config$ = this.http.get<Config>('/api/public/config').pipe(
       catchError((err) =>
         throwError(() => new Error(`Failed to load configuration: ${err.message}`)),
       ),

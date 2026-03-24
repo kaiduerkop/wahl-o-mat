@@ -1,0 +1,31 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-card__icon">⚙️</div>
+    <h1 class="login-card__title">Admin-Bereich</h1>
+    <p class="login-card__subtitle">Bitte Passwort eingeben</p>
+
+    <form class="login-card__form" (ngSubmit)="submit()">
+      <input
+        type="password"
+        class="login-card__input"
+        [(ngModel)]="password"
+        name="password"
+        placeholder="Passwort"
+        autocomplete="current-password"
+        [disabled]="loading"
+      />
+
+      @if (error()) {
+        <p class="login-card__error">{{ error() }}</p>
+      }
+
+      <button
+        type="submit"
+        class="btn btn--primary login-card__btn"
+        [disabled]="loading || !password"
+      >
+        {{ loading ? 'Anmelden…' : 'Anmelden' }}
+      </button>
+    </form>
+  </div>
+</div>
