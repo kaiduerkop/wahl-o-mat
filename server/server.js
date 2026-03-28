@@ -5,18 +5,22 @@ const Database = require('better-sqlite3');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
-const { mkdirSync } = require('fs');
+const { mkdirSync, readFileSync } = require('fs');
 const { execSync } = require('child_process');
 
 function getVersion() {
   try {
-    const tag = execSync('git describe --tags --abbrev=0', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
-    const commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
-    return { tag, commit, version: `${tag}+${commit}` };
+    const { tag, commit } = JSON.parse(readFileSync(path.join(__dirname, 'version.json'), 'utf8'));
+    if (commit) return { tag: tag || null, commit, version: tag ? `${tag}+${commit}` : commit };
   } catch {
     try {
+      const tag = execSync('git describe --tags --abbrev=0', {
+        encoding: 'utf8',
+        stdio: ['pipe', 'pipe', 'pipe'],
+      }).trim();
+
       const commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
-      return { tag: null, commit, version: commit };
+      return { tag, commit, version: `${tag}+${commit}` };
     } catch {
       return { tag: null, commit: null, version: 'unknown' };
     }
@@ -26,7 +30,8 @@ function getVersion() {
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DB_PATH = process.env.DB_PATH || path.join(__dirname, '..', 'data', 'config.sqlite');
-const JWT_SECRET = process.env.JWT_SECRET || 'change-me-in-production-' + Math.random().toString(36);
+const JWT_SECRET =
+  process.env.JWT_SECRET || 'change-me-in-production-' + Math.random().toString(36);
 const INIT_PASSWORD = process.env.ADMIN_PASSWORD || 'admin';
 
 // ── Seed data ─────────────────────────────────────────────────────────────────
@@ -35,18 +40,48 @@ const SEED_DATA = {
   title: 'Wahl-O-Mat 2026',
   description: 'Finde heraus, welche Partei am besten zu deinen politischen Ansichten passt.',
   parties: [
-    { id: 'cdu',   name: 'Christlich Demokratische Union',         shortName: 'CDU',   color: '#000000' },
-    { id: 'spd',   name: 'Sozialdemokratische Partei Deutschlands', shortName: 'SPD',   color: '#E3000F' },
-    { id: 'grüne', name: 'Bündnis 90/Die Grünen',                  shortName: 'Grüne', color: '#1AA037' },
-    { id: 'fdp',   name: 'Freie Demokratische Partei',             shortName: 'FDP',   color: '#FFED00' },
-    { id: 'linke', name: 'Die Linke',                              shortName: 'Linke', color: '#BE3075' },
+    { id: 'cdu', name: 'Christlich Demokratische Union', shortName: 'CDU', color: '#000000' },
+    {
+      id: 'spd',
+      name: 'Sozialdemokratische Partei Deutschlands',
+      shortName: 'SPD',
+      color: '#E3000F',
+    },
+    { id: 'grüne', name: 'Bündnis 90/Die Grünen', shortName: 'Grüne', color: '#1AA037' },
+    { id: 'fdp', name: 'Freie Demokratische Partei', shortName: 'FDP', color: '#FFED00' },
+    { id: 'linke', name: 'Die Linke', shortName: 'Linke', color: '#BE3075' },
   ],
   questions: [
-    { id: 'q1', category: 'Wirtschaft',  text: 'Der Mindestlohn soll auf 15 Euro pro Stunde erhöht werden.',              positions: { cdu: -1, spd: 1, grüne: 1, fdp: -1, linke: 1 } },
-    { id: 'q2', category: 'Klimaschutz', text: 'Deutschland soll bis 2035 vollständig auf erneuerbare Energien umsteigen.', positions: { cdu: 0,  spd: 1, grüne: 1, fdp: 0,  linke: 1 } },
-    { id: 'q3', category: 'Finanzen',    text: 'Die Schuldenbremse im Grundgesetz soll abgeschafft werden.',               positions: { cdu: -1, spd: 1, grüne: 1, fdp: -1, linke: 1 } },
-    { id: 'q4', category: 'Migration',   text: 'Deutschland soll mehr Geflüchtete aufnehmen als bisher.',                  positions: { cdu: -1, spd: 0, grüne: 1, fdp: 0,  linke: 1 } },
-    { id: 'q5', category: 'Gesellschaft',text: 'Cannabis soll für Erwachsene legal und in Geschäften kaufbar sein.',       positions: { cdu: -1, spd: 1, grüne: 1, fdp: 1,  linke: 1 } },
+    {
+      id: 'q1',
+      category: 'Wirtschaft',
+      text: 'Der Mindestlohn soll auf 15 Euro pro Stunde erhöht werden.',
+      positions: { cdu: -1, spd: 1, grüne: 1, fdp: -1, linke: 1 },
+    },
+    {
+      id: 'q2',
+      category: 'Klimaschutz',
+      text: 'Deutschland soll bis 2035 vollständig auf erneuerbare Energien umsteigen.',
+      positions: { cdu: 0, spd: 1, grüne: 1, fdp: 0, linke: 1 },
+    },
+    {
+      id: 'q3',
+      category: 'Finanzen',
+      text: 'Die Schuldenbremse im Grundgesetz soll abgeschafft werden.',
+      positions: { cdu: -1, spd: 1, grüne: 1, fdp: -1, linke: 1 },
+    },
+    {
+      id: 'q4',
+      category: 'Migration',
+      text: 'Deutschland soll mehr Geflüchtete aufnehmen als bisher.',
+      positions: { cdu: -1, spd: 0, grüne: 1, fdp: 0, linke: 1 },
+    },
+    {
+      id: 'q5',
+      category: 'Gesellschaft',
+      text: 'Cannabis soll für Erwachsene legal und in Geschäften kaufbar sein.',
+      positions: { cdu: -1, spd: 1, grüne: 1, fdp: 1, linke: 1 },
+    },
   ],
 };
 
@@ -101,7 +136,9 @@ function readConfig() {
     .prepare('SELECT id, text, category FROM questions ORDER BY sort_order')
     .all()
     .map((q) => {
-      const rows = db.prepare('SELECT party_id, position FROM positions WHERE question_id = ?').all(q.id);
+      const rows = db
+        .prepare('SELECT party_id, position FROM positions WHERE question_id = ?')
+        .all(q.id);
       const positions = {};
       for (const r of rows) positions[r.party_id] = r.position;
       return { id: q.id, text: q.text, category: q.category, positions };
@@ -116,13 +153,19 @@ const writeConfig = db.transaction((config) => {
   upsert.run('description', config.description ?? '');
 
   db.prepare('DELETE FROM parties').run();
-  const insParty = db.prepare('INSERT INTO parties (id, name, short_name, color, sort_order) VALUES (?, ?, ?, ?, ?)');
+  const insParty = db.prepare(
+    'INSERT INTO parties (id, name, short_name, color, sort_order) VALUES (?, ?, ?, ?, ?)',
+  );
   (config.parties ?? []).forEach((p, i) => insParty.run(p.id, p.name, p.shortName, p.color, i));
 
   db.prepare('DELETE FROM positions').run();
   db.prepare('DELETE FROM questions').run();
-  const insQ   = db.prepare('INSERT INTO questions (id, text, category, sort_order) VALUES (?, ?, ?, ?)');
-  const insPos = db.prepare('INSERT INTO positions (question_id, party_id, position) VALUES (?, ?, ?)');
+  const insQ = db.prepare(
+    'INSERT INTO questions (id, text, category, sort_order) VALUES (?, ?, ?, ?)',
+  );
+  const insPos = db.prepare(
+    'INSERT INTO positions (question_id, party_id, position) VALUES (?, ?, ?)',
+  );
   (config.questions ?? []).forEach((q, i) => {
     insQ.run(q.id, q.text, q.category, i);
     for (const [partyId, pos] of Object.entries(q.positions ?? {})) insPos.run(q.id, partyId, pos);
@@ -222,8 +265,13 @@ app.get('/api/config', requireAuth, (req, res) => {
 
 app.put('/api/config', requireAuth, (req, res) => {
   const body = req.body;
-  if (!body || typeof body !== 'object' || typeof body.title !== 'string' ||
-      !Array.isArray(body.parties) || !Array.isArray(body.questions)) {
+  if (
+    !body ||
+    typeof body !== 'object' ||
+    typeof body.title !== 'string' ||
+    !Array.isArray(body.parties) ||
+    !Array.isArray(body.questions)
+  ) {
     return res.status(400).json({ error: 'Invalid config structure' });
   }
   try {

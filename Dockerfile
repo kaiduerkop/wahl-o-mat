@@ -2,7 +2,7 @@
 FROM node:22-alpine AS builder
 
 # Build tools needed for better-sqlite3 native addon
-RUN apk add --no-cache python3 make g++
+RUN apk add --no-cache python3 make g++ git
 
 WORKDIR /app
 
@@ -11,6 +11,11 @@ RUN npm ci --legacy-peer-deps
 
 COPY . .
 RUN npm run build -- --configuration production
+
+# Capture git version before .git is discarded in runtime stage
+RUN TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo ""); \
+    COMMIT=$(git rev-parse --short HEAD 2>/dev/null || echo ""); \
+    echo "{\"tag\":\"$TAG\",\"commit\":\"$COMMIT\"}" > server/version.json
 
 # Install & compile server deps (including better-sqlite3)
 RUN cd server && npm ci --omit=dev --legacy-peer-deps
@@ -30,6 +35,7 @@ COPY nginx/site.conf /etc/nginx/http.d/default.conf
 
 # Server (with compiled native deps from builder)
 COPY server/ /app/server/
+COPY --from=builder /app/server/version.json /app/server/version.json
 COPY --from=builder /app/server/node_modules /app/server/node_modules
 
 # Writable data directory for SQLite
