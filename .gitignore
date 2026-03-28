@@ -35,3 +35,6 @@ yarn-error.log*
 
 CLAUDE.md
 .claude
+
+# Local devcontainer overrides (not shared)
+.devcontainer/docker-compose.override.yml

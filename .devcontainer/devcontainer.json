@@ -1,15 +1,14 @@
 {
   "name": "Wahl-O-Mat Angular Dev",
-  "image": "mcr.microsoft.com/devcontainers/typescript-node:1-22-bookworm",
+  "dockerComposeFile": ["docker-compose.yml", "docker-compose.override.yml"],
+  "service": "app",
+  "workspaceFolder": "/workspaces/wahl-o-mat",
 
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-
-  "mounts": [
-    "source=${localEnv:HOME}/.ssh,target=/home/node/.ssh,type=bind,consistency=cached,readonly"
-  ],
 
   "forwardPorts": [4200, 4201],
   "portsAttributes": {
@@ -17,7 +16,7 @@
     "4201": { "label": "Angular Test Runner" }
   },
 
-  "postCreateCommand": "npm install -g @angular/cli && ([ -f package.json ] && npm install || true)",
+  "postCreateCommand": "npm install -g @angular/cli && ([ -f package.json ] && npm install --legacy-peer-deps || true)",
 
   "customizations": {
     "vscode": {

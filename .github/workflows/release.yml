@@ -10,8 +10,28 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  validate-tag-on-main:
+    name: Ensure tag is on main branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Check tag commit is reachable from main
+        run: |
+          git fetch origin main
+          if ! git merge-base --is-ancestor "${{ github.sha }}" origin/main; then
+            echo "Error: Tags may only be created on commits that are part of the 'main' branch."
+            echo "Commit ${{ github.sha }} is not reachable from 'main'."
+            exit 1
+          fi
+          echo "Tag commit is on the 'main' branch. OK."
+
   release:
     name: Build Docker Image & Create Release
+    needs: validate-tag-on-main
     runs-on: ubuntu-latest
     permissions:
       contents: write
