@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-footer',
-  imports: [RouterLink, AsyncPipe],
+  imports: [RouterLink],
   template: `
     <footer class="app-footer">
       <div class="app-footer__inner">
