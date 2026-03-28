@@ -4,6 +4,9 @@
   "service": "app",
   "workspaceFolder": "/workspaces/wahl-o-mat",
 
+  "postCreateCommand": ".devcontainer/post_create.sh",
+  "postStartCommand": "ssh-add ~/.ssh/id_ed25519 2>/dev/null || true",
+
   "features": {
     "ghcr.io/devcontainers/features/git:1": {},
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
@@ -15,8 +18,6 @@
     "4200": { "label": "Angular Dev Server", "onAutoForward": "openBrowser" },
     "4201": { "label": "Angular Test Runner" }
   },
-
-  "postCreateCommand": "npm install -g @angular/cli && ([ -f package.json ] && npm install --legacy-peer-deps || true)",
 
   "customizations": {
     "vscode": {
