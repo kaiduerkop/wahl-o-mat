@@ -8,6 +8,9 @@
         <span class="start__badge">{{ config.parties.length }} Parteien</span>
       </div>
       <button class="btn btn--primary start__cta" (click)="start()">Jetzt starten</button>
+      @if (version$ | async; as v) {
+        <span class="start__version">{{ v.version }}</span>
+      }
     </div>
 
     <section class="start__parties">
