@@ -7,13 +7,13 @@ RUN apk add --no-cache python3 make g++
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm ci --legacy-peer-deps
 
 COPY . .
 RUN npm run build -- --configuration production
 
 # Install & compile server deps (including better-sqlite3)
-RUN cd server && npm ci --omit=dev
+RUN cd server && npm ci --omit=dev --legacy-peer-deps
 
 # Stage 2: Runtime
 FROM node:22-alpine

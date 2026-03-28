@@ -6,6 +6,22 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const { mkdirSync } = require('fs');
+const { execSync } = require('child_process');
+
+function getVersion() {
+  try {
+    const tag = execSync('git describe --tags --abbrev=0', { encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
+    const commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+    return { tag, commit, version: `${tag}+${commit}` };
+  } catch {
+    try {
+      const commit = execSync('git rev-parse --short HEAD', { encoding: 'utf8' }).trim();
+      return { tag: null, commit, version: commit };
+    } catch {
+      return { tag: null, commit: null, version: 'unknown' };
+    }
+  }
+}
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -217,6 +233,12 @@ app.put('/api/config', requireAuth, (req, res) => {
     console.error('Write error:', e.message);
     res.status(500).json({ error: 'Failed to save configuration' });
   }
+});
+
+// ── Version route (public) ────────────────────────────────────────────────────
+
+app.get('/api/version', (req, res) => {
+  res.json(getVersion());
 });
 
 // ── Public config route for the quiz (read-only, no auth) ────────────────────

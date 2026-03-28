@@ -1,0 +1,8 @@
+services:
+  app:
+    image: mcr.microsoft.com/devcontainers/typescript-node:22-bookworm
+    volumes:
+      - ..:/workspaces/wahl-o-mat:cached
+      - ${HOME}/.ssh:/home/node/.ssh:ro,cached
+    command: sleep infinity
+    network_mode: host
